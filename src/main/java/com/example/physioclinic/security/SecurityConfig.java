@@ -55,7 +55,12 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/v3/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/physiotherapist").hasRole("PHYSIOTHERAPIST"));
+                        .requestMatchers(HttpMethod.GET, "/physiotherapist").hasRole("PHYSIOTHERAPIST")
+                        .requestMatchers(HttpMethod.GET, "/patient").hasRole("PATIENT")
+                        .requestMatchers(HttpMethod.GET, "/logged_username").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/logged_authorities").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/disable_user").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/change_password").authenticated());
 
         http.httpBasic(Customizer.withDefaults());
         http.csrf(AbstractHttpConfigurer::disable);

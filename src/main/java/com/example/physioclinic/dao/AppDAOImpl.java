@@ -4,6 +4,7 @@ import com.example.physioclinic.entity.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -25,5 +26,20 @@ public class AppDAOImpl implements AppDAO{
             user = null;
         }
         return user;
+    }
+
+    @Override
+    public String getLoggedUsername(Authentication authentication) {
+        return authentication.getName();
+    }
+
+    @Override
+    public String getLoggedAuthorities(Authentication authentication) {
+        return authentication.getAuthorities().toString();
+    }
+
+    @Override
+    public void updateUser(User user) {
+        entityManager.persist(user);
     }
 }

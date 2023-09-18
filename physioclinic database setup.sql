@@ -21,7 +21,7 @@ VALUES
 ('john.johnson@physioclinic.com','{bcrypt}$2a$10$bmP2wX8O0p0zP5aCV9uQXejfYDYK621Gmr4QFtI6Jqo28.oiRoaq6',1),
 ('mary.marys@physioclinic.com','{bcrypt}$2a$10$VhiCsy7MtUh9j3/jwpMy5exOVFOvgUiUiou2V1ydQaU9jpBOcutUC',1),
 ('susan.susanes@physioclinic.com','{bcrypt}$2a$10$e16QFt0LHnzF0.vzqQK6UetXzzvtrUf6oRf0qcpvwXO1ohSXM7rVe',1),
-('jack.jackson@physioclinic.com','{bcrypt}$2a$10$Pau2mGGUEEoirlCQ8UtlF.5NxQNsfk6nhkKxIJUyvw2csXMbulwT.',1);
+('jack.jackson@email.com','{bcrypt}$2a$10$Pau2mGGUEEoirlCQ8UtlF.5NxQNsfk6nhkKxIJUyvw2csXMbulwT.',1);
 
 
 CREATE TABLE `authorities` (
@@ -41,4 +41,4 @@ VALUES
 ('ROLE_LEADER', 2),
 ('ROLE_PHYSIOTHERAPIST', 2),
 ('ROLE_PHYSIOTHERAPIST', 3),
-('ROLE_PHYSIOTHERAPIST', 4);
+('ROLE_PATIENT', 4);
