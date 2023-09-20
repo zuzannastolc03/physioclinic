@@ -2,6 +2,8 @@ package com.example.physioclinic.service;
 
 import com.example.physioclinic.dao.AppDAO;
 import com.example.physioclinic.entity.Authority;
+import com.example.physioclinic.entity.Patient;
+import com.example.physioclinic.entity.Physiotherapist;
 import com.example.physioclinic.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -69,5 +71,43 @@ public class AppServiceImpl implements AppService{
         String password = passwordEncoder.encode(newPassword);
         user.setPassword(password);
         appDAO.updateUser(user);
+    }
+
+    @Override
+    @Transactional
+    public void addNewPatient(Patient patient, String email, String password) {
+        password = passwordEncoder.encode(password);
+        User user = new User(email, password, true);
+        Authority authority = new Authority("ROLE_PATIENT");
+        user.addAuthority(authority);
+        patient.setUser(user);
+        appDAO.addNewPatient(patient);
+    }
+
+
+    @Override
+    @Transactional
+    public void addNewPhysiotherapist(Physiotherapist physiotherapist) {
+        String username = generateUsername(physiotherapist.getFirstName(), physiotherapist.getLastName(), 0);
+        String password = passwordEncoder.encode(physiotherapist.getFirstName().toLowerCase());
+        User user = new User(username, password, true);
+        Authority authority = new Authority("ROLE_PHYSIOTHERAPIST");
+        user.addAuthority(authority);
+        physiotherapist.setUser(user);
+        appDAO.addNewPhysiotherapist(physiotherapist);
+    }
+
+    public String generateUsername(String firstName, String lastName, int i) {
+        String username = firstName.toLowerCase() + "." + lastName.toLowerCase();
+        if (i != 0) {
+            username = username + i;
+        }
+        username = username + "@physioclinic.com";
+        User user = findUserByUsername(username);
+        if (user != null) {
+            return generateUsername(firstName, lastName, i + 1);
+        } else {
+            return username;
+        }
     }
 }

@@ -1,16 +1,17 @@
 package com.example.physioclinic.controller;
 
+import com.example.physioclinic.entity.Patient;
+import com.example.physioclinic.entity.Physiotherapist;
 import com.example.physioclinic.entity.User;
 import com.example.physioclinic.service.AppService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class AppRestController {
@@ -76,4 +77,26 @@ public class AppRestController {
         String msg = "Password changed correctly.";
         return ResponseEntity.status(HttpStatus.OK).body(msg);
     }
+
+    @Operation(summary = "Adds a new patient with adequate inserts to users and authorities tables.")
+    @PostMapping("/new_patient")
+    public ResponseEntity<?> addNewPatient(@Valid @RequestBody Patient patient, @RequestParam @Email(message = "Invalid e-mail format.") String email, @RequestParam String password) {
+        User user = appService.findUserByUsername(email);
+        if (user != null) {
+            String errorMsg = "User with e-mail address: " + email + " already exists.";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMsg);
+        }
+        appService.addNewPatient(patient, email, password);
+        String msg = "Congratulations " + patient.getFirstName() + " " + patient.getLastName() + ", you signed up successfully!";
+        return ResponseEntity.status(HttpStatus.OK).body(msg);
+    }
+
+    @Operation(summary = "Adds a new physiotherapist with adequate inserts to users and authorities tables.")
+    @PostMapping("/new_physiotherapist")
+    public ResponseEntity<?> addNewPhysiotherapist(@Valid @RequestBody Physiotherapist physiotherapist) {
+        appService.addNewPhysiotherapist(physiotherapist);
+        String msg = "Added a new physiotherapist: " + physiotherapist.getFirstName() + " " + physiotherapist.getLastName() + " with login: " + physiotherapist.getUser().getUsername() + ".";
+        return ResponseEntity.status(HttpStatus.OK).body(msg);
+    }
+
 }

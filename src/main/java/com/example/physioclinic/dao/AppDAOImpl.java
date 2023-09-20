@@ -1,5 +1,7 @@
 package com.example.physioclinic.dao;
 
+import com.example.physioclinic.entity.Patient;
+import com.example.physioclinic.entity.Physiotherapist;
 import com.example.physioclinic.entity.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
@@ -41,5 +43,15 @@ public class AppDAOImpl implements AppDAO{
     @Override
     public void updateUser(User user) {
         entityManager.persist(user);
+    }
+
+    @Override
+    public void addNewPatient(Patient patient) {
+        entityManager.persist(patient);
+    }
+
+    @Override
+    public void addNewPhysiotherapist(Physiotherapist physiotherapist) {
+        entityManager.persist(physiotherapist);
     }
 }

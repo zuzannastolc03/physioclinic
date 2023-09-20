@@ -60,7 +60,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/logged_username").authenticated()
                         .requestMatchers(HttpMethod.GET, "/logged_authorities").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/disable_user").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/change_password").authenticated());
+                        .requestMatchers(HttpMethod.PUT, "/change_password").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/new_patient").anonymous()
+                        .requestMatchers(HttpMethod.POST, "/new_physiotherapist").hasRole("ADMIN"));
 
         http.httpBasic(Customizer.withDefaults());
         http.csrf(AbstractHttpConfigurer::disable);

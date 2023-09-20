@@ -28,7 +28,12 @@ public class User {
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private List<Authority> authorities;
-
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Patient patient;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Physiotherapist physiotherapist;
 
     public User() {
     }
@@ -77,6 +82,22 @@ public class User {
 
     public void setAuthorities(List<Authority> authorities) {
         this.authorities = authorities;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
+
+    public Physiotherapist getPhysiotherapist() {
+        return physiotherapist;
+    }
+
+    public void setPhysiotherapist(Physiotherapist physiotherapist) {
+        this.physiotherapist = physiotherapist;
     }
 
     public void addAuthority(Authority authority) {
