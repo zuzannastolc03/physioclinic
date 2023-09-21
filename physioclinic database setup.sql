@@ -1,6 +1,7 @@
 CREATE DATABASE  IF NOT EXISTS `physioclinic`;
 USE `physioclinic`;
 
+DROP TABLE IF EXISTS `diseases`;
 DROP TABLE IF EXISTS `patients`;
 DROP TABLE IF EXISTS `physiotherapists`;
 DROP TABLE IF EXISTS `authorities`;
@@ -75,3 +76,18 @@ INSERT INTO `patients` (`first_name`, `last_name`, `date_of_birth`, `user_id`)
 VALUES
 ('Susan', 'Susanes', '1990-12-12', 3), 
 ('Jack', 'Jackson', '1970-01-01', 4);
+
+
+CREATE TABLE `diseases` (
+  `disease_id` int NOT NULL AUTO_INCREMENT,
+  `disease_name` varchar(50) DEFAULT NULL,
+  `description` varchar(1023) DEFAULT NULL,
+  PRIMARY KEY (`disease_id`),
+  UNIQUE KEY (`disease_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+INSERT INTO `diseases` (`disease_name`, `description`)
+VALUES 
+('Lymphedema', 'Excess fluids gather in the lymphatic system, which then moves around in the bloodstream, causing swelling.'),
+('Osteoporosis', 'Thin and brittle, sponge-like bones have lots of holes inside them, causing them to break.'),
+('Vertigo', 'Dizziness or lightheadedness is a general and frequent complaint of many people, leading to dangerous falls.');
