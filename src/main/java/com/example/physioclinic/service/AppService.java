@@ -1,5 +1,6 @@
 package com.example.physioclinic.service;
 
+import com.example.physioclinic.entity.Disease;
 import com.example.physioclinic.entity.Patient;
 import com.example.physioclinic.entity.Physiotherapist;
 import com.example.physioclinic.entity.User;
@@ -15,4 +16,7 @@ public interface AppService extends UserDetailsService {
     void changePassword(User user, String newPassword);
     void addNewPatient(Patient patient, String email, String password);
     void addNewPhysiotherapist(Physiotherapist physiotherapist);
+    void addDisease(Disease disease);
+    Disease findDiseaseByName(String diseaseName);
+    void updateDisease(Disease disease, String diseaseName);
 }

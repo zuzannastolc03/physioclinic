@@ -1,5 +1,6 @@
 package com.example.physioclinic.controller;
 
+import com.example.physioclinic.entity.Disease;
 import com.example.physioclinic.entity.Patient;
 import com.example.physioclinic.entity.Physiotherapist;
 import com.example.physioclinic.entity.User;
@@ -99,4 +100,36 @@ public class AppRestController {
         return ResponseEntity.status(HttpStatus.OK).body(msg);
     }
 
+    @Operation(summary = "Adds a new disease to the list.")
+    @PostMapping("/add_disease")
+    public ResponseEntity<?> addDisease(@Valid @RequestBody Disease disease) {
+        appService.addDisease(disease);
+        String msg = "Added a new disease: " + disease.getDiseaseName() + ".";
+        return ResponseEntity.status(HttpStatus.OK).body(msg);
+    }
+
+    @Operation(summary = "Updates an existing disease.")
+    @PutMapping("/update_disease")
+    public ResponseEntity<?> updateDisease(@Valid @RequestBody Disease disease, @RequestParam String diseaseName) {
+        Disease tempDisease = appService.findDiseaseByName(diseaseName);
+        if (tempDisease == null) {
+            String errorMsg = "Disease " + diseaseName + " doesn't exist, so you can't update it.";
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMsg);
+        }
+        appService.updateDisease(disease, diseaseName);
+        String msg = "Updated disease: " + diseaseName + " to disease: " + disease.getDiseaseName() + " with description: " + disease.getDescription() + ".";
+        return ResponseEntity.status(HttpStatus.OK).body(msg);
+    }
+
+    @Operation(summary = "Displays disease's details.")
+    @GetMapping("/display_disease")
+    public ResponseEntity<?> displayDisease(@RequestParam String diseaseName){
+        Disease disease = appService.findDiseaseByName(diseaseName);
+        if(disease == null){
+            String errorMsg = "Disease " + diseaseName + " doesn't exist.";
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMsg);
+        }
+        String msg = "Name: " + disease.getDiseaseName() + "\n" + "Description: " + disease.getDescription();
+        return ResponseEntity.status(HttpStatus.OK).body(msg);
+    }
 }

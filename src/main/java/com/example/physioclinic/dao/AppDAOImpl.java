@@ -1,5 +1,6 @@
 package com.example.physioclinic.dao;
 
+import com.example.physioclinic.entity.Disease;
 import com.example.physioclinic.entity.Patient;
 import com.example.physioclinic.entity.Physiotherapist;
 import com.example.physioclinic.entity.User;
@@ -53,5 +54,28 @@ public class AppDAOImpl implements AppDAO{
     @Override
     public void addNewPhysiotherapist(Physiotherapist physiotherapist) {
         entityManager.persist(physiotherapist);
+    }
+
+    @Override
+    public void addDisease(Disease disease) {
+        entityManager.persist(disease);
+    }
+
+    @Override
+    public Disease findDiseaseByName(String diseaseName) {
+        Query theQuery = entityManager.createNativeQuery("SELECT * FROM physioclinic.diseases where disease_name = :diseaseName", Disease.class);
+        theQuery.setParameter("diseaseName", diseaseName);
+        Disease disease;
+        try {
+            disease = (Disease)theQuery.getSingleResult();
+        } catch (Exception e) {
+            disease = null;
+        }
+        return disease;
+    }
+
+    @Override
+    public void updateDisease(Disease disease) {
+        entityManager.persist(disease);
     }
 }

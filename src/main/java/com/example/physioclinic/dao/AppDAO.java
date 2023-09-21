@@ -1,5 +1,6 @@
 package com.example.physioclinic.dao;
 
+import com.example.physioclinic.entity.Disease;
 import com.example.physioclinic.entity.Patient;
 import com.example.physioclinic.entity.Physiotherapist;
 import com.example.physioclinic.entity.User;
@@ -12,4 +13,7 @@ public interface AppDAO {
     void updateUser(User user);
     void addNewPatient(Patient patient);
     void addNewPhysiotherapist(Physiotherapist physiotherapist);
+    void addDisease(Disease disease);
+    Disease findDiseaseByName(String diseaseName);
+    void updateDisease(Disease disease);
 }

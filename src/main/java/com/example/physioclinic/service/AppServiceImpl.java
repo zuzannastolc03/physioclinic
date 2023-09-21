@@ -1,10 +1,7 @@
 package com.example.physioclinic.service;
 
 import com.example.physioclinic.dao.AppDAO;
-import com.example.physioclinic.entity.Authority;
-import com.example.physioclinic.entity.Patient;
-import com.example.physioclinic.entity.Physiotherapist;
-import com.example.physioclinic.entity.User;
+import com.example.physioclinic.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -95,6 +92,26 @@ public class AppServiceImpl implements AppService{
         user.addAuthority(authority);
         physiotherapist.setUser(user);
         appDAO.addNewPhysiotherapist(physiotherapist);
+    }
+
+    @Override
+    @Transactional
+    public void addDisease(Disease disease) {
+        appDAO.addDisease(disease);
+    }
+
+    @Override
+    public Disease findDiseaseByName(String diseaseName) {
+        return appDAO.findDiseaseByName(diseaseName);
+    }
+
+    @Override
+    @Transactional
+    public void updateDisease(Disease disease, String diseaseName) {
+        Disease tempDisease = appDAO.findDiseaseByName(diseaseName);
+        tempDisease.setDiseaseName(disease.getDiseaseName());
+        tempDisease.setDescription(disease.getDescription());
+        appDAO.updateDisease(tempDisease);
     }
 
     public String generateUsername(String firstName, String lastName, int i) {
