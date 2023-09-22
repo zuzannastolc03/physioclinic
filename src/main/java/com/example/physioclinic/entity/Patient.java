@@ -6,6 +6,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Entity
 @Table(name = "patients")
@@ -33,6 +36,11 @@ public class Patient {
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
+
+    @OneToMany(mappedBy = "patient",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @JsonIgnore
+    List<Diagnosis> diagnosisList;
 
     public Patient() {
     }
@@ -83,6 +91,12 @@ public class Patient {
         this.user = user;
     }
 
+    public void addDiagnosis(Diagnosis diagnosis){
+        if(diagnosisList == null){
+            diagnosisList = new ArrayList<>();
+        }
+        diagnosisList.add(diagnosis);
+    }
     @Override
     public String toString() {
         return "Patient{" +

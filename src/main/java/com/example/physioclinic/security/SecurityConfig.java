@@ -65,7 +65,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/new_physiotherapist").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/add_disease").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/update_disease").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/display_disease").authenticated());
+                        .requestMatchers(HttpMethod.GET, "/display_disease").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/add_diagnosis").hasRole("PHYSIOTHERAPIST")
+                        .requestMatchers(HttpMethod.GET, "/list_of_my_diagnosis").hasRole("PATIENT")
+                        .requestMatchers(HttpMethod.GET, "/list_of_patients_diagnosis").hasRole("PHYSIOTHERAPIST"));
 
         http.httpBasic(Customizer.withDefaults());
         http.csrf(AbstractHttpConfigurer::disable);

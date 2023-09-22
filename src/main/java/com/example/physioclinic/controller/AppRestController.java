@@ -1,9 +1,6 @@
 package com.example.physioclinic.controller;
 
-import com.example.physioclinic.entity.Disease;
-import com.example.physioclinic.entity.Patient;
-import com.example.physioclinic.entity.Physiotherapist;
-import com.example.physioclinic.entity.User;
+import com.example.physioclinic.entity.*;
 import com.example.physioclinic.service.AppService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -13,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class AppRestController {
@@ -131,5 +130,47 @@ public class AppRestController {
         }
         String msg = "Name: " + disease.getDiseaseName() + "\n" + "Description: " + disease.getDescription();
         return ResponseEntity.status(HttpStatus.OK).body(msg);
+    }
+
+    @Operation(summary = "Adds a new diagnosis to the list.")
+    @PostMapping("/add_diagnosis")
+    public ResponseEntity<?> addDiagnosis(Authentication authentication, @RequestParam String patientsUsername, @RequestParam String diseasesName) {
+        Physiotherapist physiotherapist = appService.findPhysiotherapistByUsername(appService.getLoggedUsername(authentication));
+        Patient patient = appService.findPatientByUsername(patientsUsername);
+        if(patient == null){
+            String errorMsg = "Patient " + patientsUsername + " doesn't exist.";
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMsg);
+        }
+        Disease disease = appService.findDiseaseByName(diseasesName);
+        if(disease == null){
+            String errorMsg = "Disease " + diseasesName + " doesn't exist.";
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMsg);
+        }
+        Diagnosis diagnosis = new Diagnosis();
+        appService.addDiagnosis(diagnosis, physiotherapist, patient, disease);
+        String msg = "Successfully added a new diagnosis.";
+        return ResponseEntity.status(HttpStatus.OK).body(msg);
+    }
+
+    @Operation(summary = "Gets a list of diagnosis of a logged in patient (patient's own view).")
+    @GetMapping("/list_of_my_diagnosis")
+    public List<?> getPatientsDiagnosis(Authentication authentication) {
+        User user = appService.findUserByUsername(appService.getLoggedUsername(authentication));
+        Patient patient = user.getPatient();
+        return appService.getPatientsDiagnosis(patient);
+    }
+
+    @Operation(summary = "Gets a list of diagnosis of an indicated patient (physiotherapist's view).")
+    @GetMapping("/list_of_patients_diagnosis")
+    public List<?> getPatientsDiagnosis(@RequestParam String username) {
+        User user = appService.findUserByUsername(username);
+        if (user == null) {
+            throw new RuntimeException("User: " + username + " doesn't exist.");
+        }
+        Patient patient = user.getPatient();
+        if (patient == null) {
+            throw new RuntimeException("User: " + username + " is not a patient.");
+        }
+        return appService.getPatientsDiagnosis(patient);
     }
 }

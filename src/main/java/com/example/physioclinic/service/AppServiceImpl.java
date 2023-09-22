@@ -2,6 +2,7 @@ package com.example.physioclinic.service;
 
 import com.example.physioclinic.dao.AppDAO;
 import com.example.physioclinic.entity.*;
+import jdk.jshell.Diag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -112,6 +114,44 @@ public class AppServiceImpl implements AppService{
         tempDisease.setDiseaseName(disease.getDiseaseName());
         tempDisease.setDescription(disease.getDescription());
         appDAO.updateDisease(tempDisease);
+    }
+
+    @Override
+    public Patient findPatientByUsername(String username) {
+        User user = findUserByUsername(username);
+        Patient patient;
+        try {
+            patient = user.getPatient();
+        } catch (Exception ex) {
+            patient = null;
+        }
+        return patient;
+    }
+
+    @Override
+    public Physiotherapist findPhysiotherapistByUsername(String username) {
+        User user = findUserByUsername(username);
+        Physiotherapist physiotherapist;
+        try {
+            physiotherapist = user.getPhysiotherapist();
+        } catch (Exception ex) {
+            physiotherapist = null;
+        }
+        return physiotherapist;
+    }
+
+    @Override
+    @Transactional
+    public void addDiagnosis(Diagnosis diagnosis, Physiotherapist physiotherapist, Patient patient, Disease disease) {
+        diagnosis.setPhysiotherapist(physiotherapist);
+        diagnosis.setPatient(patient);
+        diagnosis.setDisease(disease);
+        appDAO.addDiagnosis(diagnosis);
+    }
+
+    @Override
+    public List<?> getPatientsDiagnosis(Patient patient) {
+        return appDAO.getPatientsDiagnosis(patient);
     }
 
     public String generateUsername(String firstName, String lastName, int i) {

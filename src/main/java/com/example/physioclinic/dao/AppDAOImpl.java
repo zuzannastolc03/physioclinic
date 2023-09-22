@@ -1,14 +1,13 @@
 package com.example.physioclinic.dao;
 
-import com.example.physioclinic.entity.Disease;
-import com.example.physioclinic.entity.Patient;
-import com.example.physioclinic.entity.Physiotherapist;
-import com.example.physioclinic.entity.User;
+import com.example.physioclinic.entity.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public class AppDAOImpl implements AppDAO{
@@ -77,5 +76,17 @@ public class AppDAOImpl implements AppDAO{
     @Override
     public void updateDisease(Disease disease) {
         entityManager.persist(disease);
+    }
+
+    @Override
+    public void addDiagnosis(Diagnosis diagnosis) {
+        entityManager.persist(diagnosis);
+    }
+
+    @Override
+    public List<?> getPatientsDiagnosis(Patient patient) {
+        Query theQuery = entityManager.createNativeQuery("SELECT * FROM physioclinic.diagnosis where patient_id = :patientId", Diagnosis.class);
+        theQuery.setParameter("patientId", patient.getPatientId());
+        return theQuery.getResultList();
     }
 }
