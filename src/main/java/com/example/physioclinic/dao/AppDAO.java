@@ -17,4 +17,6 @@ public interface AppDAO {
     void updateDisease(Disease disease);
     void addDiagnosis(Diagnosis diagnosis);
     List<?> getPatientsDiagnosis(Patient patient);
+    Exercise findExerciseByName(String exerciseName);
+    List<?> getListOfPictures();
 }

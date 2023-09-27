@@ -22,4 +22,6 @@ public interface AppService extends UserDetailsService {
     Physiotherapist findPhysiotherapistByUsername(String username);
     void addDiagnosis(Diagnosis diagnosis, Physiotherapist physiotherapist, Patient patient, Disease disease);
     List<?> getPatientsDiagnosis(Patient patient);
+    Exercise findExerciseByName(String exerciseName);
+    List<?> getListOfPictures();
 }

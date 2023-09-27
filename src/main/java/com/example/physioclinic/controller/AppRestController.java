@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -172,5 +173,22 @@ public class AppRestController {
             throw new RuntimeException("User: " + username + " is not a patient.");
         }
         return appService.getPatientsDiagnosis(patient);
+    }
+
+    @Operation(summary = "Generates a name of a .jpg in which the proper way of making an exercise is shown.")
+    @GetMapping("/exercises_picture")
+    public String getExercisesPicturesName(@RequestParam String exerciseName) {
+        Exercise exercise = appService.findExerciseByName(exerciseName);
+        if (exercise == null) {
+            throw new RuntimeException("Exercise: " + exerciseName + " doesn't exist.");
+        }
+        return exerciseName.replaceAll(" ", "_").toLowerCase().concat(".jpg");
+    }
+
+    @Operation(summary = "Gets a list of available pictures.")
+    @GetMapping("/exercises_list")
+    public List<?> getExercisesPicturesName() {
+        System.out.println(appService.getListOfPictures());
+        return appService.getListOfPictures();
     }
 }

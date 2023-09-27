@@ -1,6 +1,8 @@
 CREATE DATABASE  IF NOT EXISTS `physioclinic`;
 USE `physioclinic`;
 
+DROP TABLE IF EXISTS `exercises`;
+DROP TABLE IF EXISTS `diagnosis`;
 DROP TABLE IF EXISTS `diseases`;
 DROP TABLE IF EXISTS `patients`;
 DROP TABLE IF EXISTS `physiotherapists`;
@@ -91,3 +93,37 @@ VALUES
 ('Lymphedema', 'Excess fluids gather in the lymphatic system, which then moves around in the bloodstream, causing swelling.'),
 ('Osteoporosis', 'Thin and brittle, sponge-like bones have lots of holes inside them, causing them to break.'),
 ('Vertigo', 'Dizziness or lightheadedness is a general and frequent complaint of many people, leading to dangerous falls.');
+
+
+CREATE TABLE `diagnosis` (
+  `diagnosis_id` int NOT NULL AUTO_INCREMENT,
+  `physiotherapist_id` int DEFAULT NULL,
+  `patient_id` int DEFAULT NULL,
+  `disease_id` int DEFAULT NULL,
+  PRIMARY KEY (`diagnosis_id`),
+  FOREIGN KEY (`physiotherapist_id`) REFERENCES `physiotherapists` (`physiotherapist_id`)
+  ON DELETE NO ACTION ON UPDATE NO ACTION,
+  FOREIGN KEY (`patient_id`) REFERENCES `patients` (`patient_id`)
+  ON DELETE NO ACTION ON UPDATE NO ACTION,
+  FOREIGN KEY (`disease_id`) REFERENCES `diseases` (`disease_id`)
+  ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+INSERT INTO `diagnosis` (`physiotherapist_id`, `patient_id`, `disease_id`)
+VALUES 
+(1, 1, 1),
+(2, 2, 2);
+
+
+CREATE TABLE `exercises` (
+  `exercise_id` int NOT NULL AUTO_INCREMENT,
+  `exercise_name` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`exercise_id`),
+  UNIQUE KEY (`exercise_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+INSERT INTO `exercises` (`exercise_name`)
+VALUES 
+('Bulgarian squat'),
+('Push-up'),
+('Single leg standing balance');

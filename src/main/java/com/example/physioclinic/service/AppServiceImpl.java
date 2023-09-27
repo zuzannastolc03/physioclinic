@@ -154,6 +154,16 @@ public class AppServiceImpl implements AppService{
         return appDAO.getPatientsDiagnosis(patient);
     }
 
+    @Override
+    public Exercise findExerciseByName(String exerciseName) {
+        return appDAO.findExerciseByName(exerciseName);
+    }
+
+    @Override
+    public List<?> getListOfPictures() {
+        return appDAO.getListOfPictures();
+    }
+
     public String generateUsername(String firstName, String lastName, int i) {
         String username = firstName.toLowerCase() + "." + lastName.toLowerCase();
         if (i != 0) {
