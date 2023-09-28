@@ -2,7 +2,6 @@ package com.example.physioclinic.service;
 
 import com.example.physioclinic.dao.AppDAO;
 import com.example.physioclinic.entity.*;
-import jdk.jshell.Diag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -162,6 +161,16 @@ public class AppServiceImpl implements AppService{
     @Override
     public List<?> getListOfPictures() {
         return appDAO.getListOfPictures();
+    }
+
+    @Override
+    public Diagnosis findDiagnosisById(int diagnosisId) {
+        return appDAO.findDiagnosisById(diagnosisId);
+    }
+
+    @Override
+    public List<?> getListOfTherapies(Diagnosis diagnosis) {
+        return appDAO.getListOfTherapies(diagnosis);
     }
 
     public String generateUsername(String firstName, String lastName, int i) {

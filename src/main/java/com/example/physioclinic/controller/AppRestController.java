@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -188,7 +187,26 @@ public class AppRestController {
     @Operation(summary = "Gets a list of available pictures.")
     @GetMapping("/exercises_list")
     public List<?> getExercisesPicturesName() {
-        System.out.println(appService.getListOfPictures());
         return appService.getListOfPictures();
     }
+
+    @Operation(summary = "Shows a list of prescribed exercises for particular illness for a logged in patient.")
+    @GetMapping("/exercises_for_patients_diagnosis")
+    public List<?> getPrescribedExercises(Authentication authentication, @RequestParam int diagnosisId) {
+        User user = appService.findUserByUsername(appService.getLoggedUsername(authentication));
+        Patient patient = user.getPatient();
+        Diagnosis diagnosis = appService.findDiagnosisById(diagnosisId);
+
+        if(diagnosis == null){
+            throw new RuntimeException("Diagnosis with id: " + diagnosisId + " doesn't exist!");
+        }
+        if(patient != null){
+            Patient tempPatient = diagnosis.getPatient();
+            if(tempPatient != patient){
+                throw new RuntimeException("This is not your diagnosis!");
+            }
+        }
+        return appService.getListOfTherapies(diagnosis);
+    }
+    
 }

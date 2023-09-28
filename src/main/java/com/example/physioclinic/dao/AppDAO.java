@@ -19,4 +19,6 @@ public interface AppDAO {
     List<?> getPatientsDiagnosis(Patient patient);
     Exercise findExerciseByName(String exerciseName);
     List<?> getListOfPictures();
+    Diagnosis findDiagnosisById(int diagnosisId);
+    List<?> getListOfTherapies(Diagnosis diagnosis);
 }

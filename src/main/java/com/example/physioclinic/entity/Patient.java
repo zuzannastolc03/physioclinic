@@ -91,6 +91,14 @@ public class Patient {
         this.user = user;
     }
 
+    public List<Diagnosis> getDiagnosisList() {
+        return diagnosisList;
+    }
+
+    public void setDiagnosisList(List<Diagnosis> diagnosisList) {
+        this.diagnosisList = diagnosisList;
+    }
+
     public void addDiagnosis(Diagnosis diagnosis){
         if(diagnosisList == null){
             diagnosisList = new ArrayList<>();

@@ -9,7 +9,6 @@ import java.util.List;
 public interface AppService extends UserDetailsService {
     User findUserByUsername(String username);
     String getLoggedUsername(Authentication authentication);
-
     String getLoggedAuthorities(Authentication authentication);
     void disableUser(User user);
     void changePassword(User user, String newPassword);
@@ -24,4 +23,6 @@ public interface AppService extends UserDetailsService {
     List<?> getPatientsDiagnosis(Patient patient);
     Exercise findExerciseByName(String exerciseName);
     List<?> getListOfPictures();
+    Diagnosis findDiagnosisById(int diagnosisId);
+    List<?> getListOfTherapies(Diagnosis diagnosis);
 }

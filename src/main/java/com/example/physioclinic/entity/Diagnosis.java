@@ -3,6 +3,9 @@ package com.example.physioclinic.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "diagnosis")
 public class Diagnosis {
@@ -19,6 +22,10 @@ public class Diagnosis {
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "disease_id")
     private Disease disease;
+    @OneToMany(mappedBy = "diagnosis",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @JsonIgnore
+    List<Therapy> therapies;
 
     public Diagnosis() {
     }
@@ -53,6 +60,21 @@ public class Diagnosis {
 
     public void setDisease(Disease disease) {
         this.disease = disease;
+    }
+
+    public List<Therapy> getTherapies() {
+        return therapies;
+    }
+
+    public void setTherapies(List<Therapy> therapies) {
+        this.therapies = therapies;
+    }
+
+    public void addTherapy(Therapy therapy){
+        if(therapies == null){
+            therapies = new ArrayList<>();
+        }
+        therapies.add(therapy);
     }
 
     @Override

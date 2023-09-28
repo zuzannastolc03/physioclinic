@@ -2,6 +2,7 @@ package com.example.physioclinic.entity;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "exercises")
@@ -11,6 +12,7 @@ public class Exercise {
     @Column(name = "exercise_id")
     private int exerciseId;
     @Column(name = "exercise_name")
+    @NotBlank
     private String exerciseName;
 
     public Exercise() {

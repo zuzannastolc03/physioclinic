@@ -4,17 +4,12 @@ import com.example.physioclinic.entity.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Repository;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 @Repository
 public class AppDAOImpl implements AppDAO{
@@ -123,5 +118,17 @@ public class AppDAOImpl implements AppDAO{
             }
         }
         return fileList;
+    }
+
+    @Override
+    public Diagnosis findDiagnosisById(int diagnosisId) {
+        return entityManager.find(Diagnosis.class, diagnosisId);
+    }
+
+    @Override
+    public List<?> getListOfTherapies(Diagnosis diagnosis) {
+        Query theQuery = entityManager.createNativeQuery("SELECT * FROM physioclinic.therapies where diagnosis_id = :diagnosisId", Therapy.class);
+        theQuery.setParameter("diagnosisId", diagnosis.getDiagnosisId());
+        return theQuery.getResultList();
     }
 }
