@@ -21,4 +21,8 @@ public interface AppDAO {
     List<?> getListOfPictures();
     Diagnosis findDiagnosisById(int diagnosisId);
     List<?> getListOfTherapies(Diagnosis diagnosis);
+    void addTherapy(Therapy therapy);
+    Therapy findTherapyById(int therapyId);
+    void updateTherapy(Therapy therapy);
+    void deleteTherapy(int therapyId);
 }

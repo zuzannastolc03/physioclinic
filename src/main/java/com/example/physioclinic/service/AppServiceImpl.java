@@ -173,6 +173,34 @@ public class AppServiceImpl implements AppService{
         return appDAO.getListOfTherapies(diagnosis);
     }
 
+    @Override
+    @Transactional
+    public void addNewTherapy(Therapy therapy, Diagnosis diagnosis, Exercise exercise) {
+        therapy.setDiagnosis(diagnosis);
+        therapy.setExercise(exercise);
+        appDAO.addTherapy(therapy);
+    }
+
+    @Override
+    public Therapy findTherapyById(int therapyId) {
+        return appDAO.findTherapyById(therapyId);
+    }
+
+    @Override
+    @Transactional
+    public void updateTherapy(Therapy therapy, int therapyId) {
+        Therapy tempTherapy = appDAO.findTherapyById(therapyId);
+        tempTherapy.setSequence(therapy.getSequence());
+        tempTherapy.setComments(therapy.getComments());
+        appDAO.updateTherapy(tempTherapy);
+    }
+
+    @Override
+    @Transactional
+    public void deleteTherapy(int therapyId) {
+        appDAO.deleteTherapy(therapyId);
+    }
+
     public String generateUsername(String firstName, String lastName, int i) {
         String username = firstName.toLowerCase() + "." + lastName.toLowerCase();
         if (i != 0) {

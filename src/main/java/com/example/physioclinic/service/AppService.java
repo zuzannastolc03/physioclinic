@@ -25,4 +25,8 @@ public interface AppService extends UserDetailsService {
     List<?> getListOfPictures();
     Diagnosis findDiagnosisById(int diagnosisId);
     List<?> getListOfTherapies(Diagnosis diagnosis);
+    void addNewTherapy(Therapy therapy, Diagnosis diagnosis, Exercise exercise);
+    Therapy findTherapyById(int therapyId);
+    void updateTherapy(Therapy therapy, int therapyId);
+    void deleteTherapy(int therapyId);
 }

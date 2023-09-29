@@ -208,5 +208,61 @@ public class AppRestController {
         }
         return appService.getListOfTherapies(diagnosis);
     }
-    
+    @Operation(summary = "Adds a new therapy connected to given diagnosis.")
+    @PostMapping("/add_therapy")
+    public ResponseEntity<?> addTherapy(@RequestParam int diagnosisId, @RequestParam String exerciseName, @Valid @RequestBody Therapy therapy) {
+        Diagnosis diagnosis = appService.findDiagnosisById(diagnosisId);
+        if(diagnosis == null){
+            String errorMsg = "Diagnosis with id " + diagnosisId + " doesn't exist.";
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMsg);
+        }
+        Exercise exercise = appService.findExerciseByName(exerciseName);
+        if(exercise == null){
+            String errorMsg = "Exercise " + exerciseName + " doesn't exist.";
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMsg);
+        }
+        List<?> therapies = appService.getListOfTherapies(diagnosis);
+        for(Object tempTherapy: therapies){
+            Exercise tempExercise = ((Therapy) tempTherapy).getExercise();
+            if(tempExercise == exercise){
+                String errorMsg = "Exercise " + exerciseName + " has already been assigned to this diagnosis.";
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMsg);
+            }
+        }
+        appService.addNewTherapy(therapy, diagnosis, exercise);
+        String msg = "Successfully added a new therapy.";
+        return ResponseEntity.status(HttpStatus.OK).body(msg);
+    }
+
+    @Operation(summary = "Updates an existing therapy.")
+    @PutMapping("/update_therapy")
+    public ResponseEntity<?> updateTherapy(@Valid @RequestBody Therapy therapy, @RequestParam int therapyId) {
+        Therapy tempTherapy = appService.findTherapyById(therapyId);
+        if (tempTherapy == null) {
+            String errorMsg = "Therapy with id: " + therapyId + " doesn't exist, so you can't update it.";
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMsg);
+        }
+        appService.updateTherapy(therapy, therapyId);
+        String msg = "Updated therapy with id: " + therapyId + " to therapy with diagnosis id: " + tempTherapy.getDiagnosis().getDiagnosisId() + ", exercise: " + tempTherapy.getExercise().getExerciseName() + ", sequence: " + therapy.getSequence() + ", comments: " + therapy.getComments() + ".";
+        return ResponseEntity.status(HttpStatus.OK).body(msg);
+    }
+
+    @Operation(summary = "Deletes a therapy with a given ID.")
+    @DeleteMapping("/delete_therapy")
+    public ResponseEntity<?> deleteTherapy(Authentication authentication, @RequestParam int therapyId) {
+        Therapy therapy = appService.findTherapyById(therapyId);
+        if (therapy == null) {
+            String errorMsg = "Therapy with id: " + therapyId + " doesn't exists.";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMsg);
+        }
+        String username = appService.getLoggedUsername(authentication);
+        Physiotherapist physiotherapist = appService.findPhysiotherapistByUsername(username);
+        if (physiotherapist.getPhysiotherapistId() != therapy.getDiagnosis().getPhysiotherapist().getPhysiotherapistId()) {
+            String errorMsg = "You didn't post this therapy: " + therapyId + ", diagnosis id: " + therapy.getDiagnosis().getDiagnosisId() + ", exercise: " + therapy.getExercise().getExerciseName() + ", sequence: " + therapy.getSequence() + ", comments: " + therapy.getComments() + ".";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMsg);
+        }
+        appService.deleteTherapy(therapyId);
+        String msg = "Successfully deleted therapy with id: " + therapyId + ".";
+        return ResponseEntity.status(HttpStatus.OK).body(msg);
+    }
 }

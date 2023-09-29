@@ -131,4 +131,25 @@ public class AppDAOImpl implements AppDAO{
         theQuery.setParameter("diagnosisId", diagnosis.getDiagnosisId());
         return theQuery.getResultList();
     }
+
+    @Override
+    public void addTherapy(Therapy therapy) {
+        entityManager.persist(therapy);
+    }
+
+    @Override
+    public Therapy findTherapyById(int therapyId) {
+        return entityManager.find(Therapy.class, therapyId);
+    }
+
+    @Override
+    public void updateTherapy(Therapy therapy) {
+        entityManager.persist(therapy);
+    }
+
+    @Override
+    public void deleteTherapy(int therapyId) {
+        Therapy therapy = findTherapyById(therapyId);
+        entityManager.remove(therapy);
+    }
 }

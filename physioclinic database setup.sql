@@ -1,6 +1,7 @@
 CREATE DATABASE  IF NOT EXISTS `physioclinic`;
 USE `physioclinic`;
 
+DROP TABLE IF EXISTS `therapies`;
 DROP TABLE IF EXISTS `exercises`;
 DROP TABLE IF EXISTS `diagnosis`;
 DROP TABLE IF EXISTS `diseases`;
@@ -127,3 +128,23 @@ VALUES
 ('Bulgarian squat'),
 ('Push-up'),
 ('Single leg standing balance');
+
+
+CREATE TABLE `therapies` (
+  `therapy_id` int NOT NULL AUTO_INCREMENT,
+  `diagnosis_id` int DEFAULT NULL,
+  `exercise_id` int DEFAULT NULL,
+  `sequence` varchar(1023) DEFAULT NULL,
+  `comments` varchar(1023) DEFAULT NULL,
+  PRIMARY KEY (`therapy_id`),
+  FOREIGN KEY (`diagnosis_id`) REFERENCES `diagnosis` (`diagnosis_id`)
+  ON DELETE NO ACTION ON UPDATE NO ACTION,
+  FOREIGN KEY (`exercise_id`) REFERENCES `exercises` (`exercise_id`)
+  ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+INSERT INTO `therapies` (`diagnosis_id`, `exercise_id`, `sequence`, `comments`)
+VALUES 
+(1, 1, 'Once a day 4x12', 'Remember to always have your stomach tighten.'),
+(1, 2, 'Twice a week 1x20', 'If you do not feel like doing it on your feet with knees up, simply place your knees on the floor.'),
+(2, 3, 'Twice a day 4 times one minute', 'To make it a little bit harder, try standing with your eyes closed.');
